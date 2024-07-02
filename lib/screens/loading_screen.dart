@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_clima_app/services/location.dart';
+import 'package:http/http.dart' as http;
 
 class LoadingScreen extends StatefulWidget {
   @override
@@ -9,9 +12,22 @@ class LoadingScreen extends StatefulWidget {
 class _LoadingScreenState extends State<LoadingScreen> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getLocation();
+  }
+
+  void getData() async {
+    final url = Uri.parse(
+        "http://api.openweathermap.org/data/2.5/weather?q=Manchester,uk&APPID=6e5813f9488b1eb1c966505c598fa703");
+    http.Response response = await http.get(url);
+    if (response.statusCode == 200) {
+      String data = response.body;
+      //print(data);
+      var lo = jsonDecode(data)['coord']['lon'];
+      print(lo);
+    } else {
+      print(response.statusCode);
+    }
   }
 
   void getLocation() async {
@@ -24,6 +40,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    getData();
     return Scaffold(
       body: Center(
         child: CircularProgressIndicator(),
