@@ -1,49 +1,50 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_clima_app/screens/location_screen.dart';
 import 'package:flutter_clima_app/services/location.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter_clima_app/services/networking.dart';
+import 'package:flutter_clima_app/utilities/constants.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class LoadingScreen extends StatefulWidget {
   @override
   _LoadingScreenState createState() => _LoadingScreenState();
 }
 
+var myLatitude;
+var myLongitude;
+
 class _LoadingScreenState extends State<LoadingScreen> {
   @override
   void initState() {
     super.initState();
-    getLocation();
+    getLocationData();
   }
 
-  void getData() async {
-    final url = Uri.parse(
-        "http://api.openweathermap.org/data/2.5/weather?q=Manchester,uk&APPID=6e5813f9488b1eb1c966505c598fa703");
-    http.Response response = await http.get(url);
-    if (response.statusCode == 200) {
-      String data = response.body;
-      //print(data);
-      var lo = jsonDecode(data)['coord']['lon'];
-      print(lo);
-    } else {
-      print(response.statusCode);
-    }
-  }
-
-  void getLocation() async {
+  void getLocationData() async {
     // LocationPermission permission = await Geolocator.requestPermission();
     Location location = Location();
     await location.getCurrentLocation();
-    print(location.latitude);
-    print(location.longitude);
+    myLatitude = location.latitude;
+    myLongitude = location.longitude;
+    NetworkHelper networkHelper = NetworkHelper(
+        "https://api.openweathermap.org/data/2.5/weather?lat=$myLatitude&lon=$myLongitude&appid=$kOpenWeatherApiKey");
+    var weatherData = networkHelper.getData();
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) {
+        return LocationScreen();
+      }),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    getData();
     return Scaffold(
       body: Center(
-        child: CircularProgressIndicator(),
+        child: SpinKitDoubleBounce(
+          size: 100.0,
+          color: Colors.white,
+        ),
       ),
     );
   }
