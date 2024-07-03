@@ -18,13 +18,12 @@ class _LoadingScreenState extends State<LoadingScreen> {
   }
 
   void getLocationData() async {
-    // LocationPermission permission = await Geolocator.requestPermission();
     Location location = Location();
     await location.getCurrentLocation();
 
     NetworkHelper networkHelper = NetworkHelper(
-        "https://api.openweathermap.org/data/2.5/weather?lat=${location.latitude}&lon=${location.longitude}&appid=$kOpenWeatherApiKey");
-    var weatherData = networkHelper.getData();
+        "https://api.openweathermap.org/data/2.5/weather?lat=${location.latitude}&lon=${location.longitude}&appid=$kOpenWeatherApiKey&units=metric");
+    var weatherData = await networkHelper.getData();
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) {
