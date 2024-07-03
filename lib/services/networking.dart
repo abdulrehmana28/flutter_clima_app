@@ -5,10 +5,11 @@ import 'package:http/http.dart' as http;
 class NetworkHelper {
   NetworkHelper(this.url) {}
 
-  var url;
+  String url;
 
   Future getData() async {
-    http.Response response = await http.get(url);
+    final uri = Uri.parse(url);
+    http.Response response = await http.get(uri);
     if (response.statusCode == 200) {
       String data = response.body;
       //print(data);
