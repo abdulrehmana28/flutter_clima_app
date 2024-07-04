@@ -1,10 +1,12 @@
 # flutter_clima_app
 
-A Simple Weather App
+A Simple Weather App using Open WeatherMap Api
 
-## Getting Started
+## Packages Used
 
-This project is a starting point for a Flutter application.
+- [geolocator: ^12.0.0](https://pub.dev/packages/geolocator)
+- [http: ^1.2.1](https://pub.dev/packages/http)
+- [flutter_spinkit: ^5.2.1](https://pub.dev/packages/flutter_spinkit)
 
 A few resources to get you started if this is your first Flutter project:
 
